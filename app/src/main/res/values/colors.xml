@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="clear_Sky_Background">#3FB5FF</color>
+    <color name="clear_Sky_Items">#0289FE</color>
+    <color name="rain_Sky_Background">#3682CA</color>
+    <color name="rain_Sky_Items">#1A71D3</color>
+    <color name="night_Sky_Background">#274D87</color>
+    <color name="night_Sky_Items">#2A589C</color>
+    <color name="mainlyCloudy_Sky_Background">#6789A5</color>
+    <color name="mainlyCloudy_Sky_Items">#5C7F9C</color>
+    <color name="white">#ffffff</color>
+</resources>
