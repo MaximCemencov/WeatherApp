@@ -35,11 +35,11 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
 
     init {
-        ReLoad()
+        reLoad()
     }
 
 
-    fun ReLoad(geoData: GeoData? = null) {
+    fun reLoad(geoData: GeoData? = null) {
         val latitude = geoData?.latitude
         val longitude = geoData?.longitude
         val showLocation = geoData?.showLocation
@@ -49,8 +49,8 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         viewModelScope.launch {
             _isloading.value = true
             val _favoriteCity = loadFavoriteCity(context)
-            var latitudeLocal: Double?
-            var longitudeLocal: Double?
+            val latitudeLocal: Double?
+            val longitudeLocal: Double?
 
             // если есть _favoriteCity и нет showLocation и нет showSelectedCity
             if (_favoriteCity != null && showLocation != true && showSelectedCity != true) {
@@ -71,6 +71,9 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                 latitudeLocal = null
                 longitudeLocal = null
             }
+
+
+
 
             val weatherData = fetchWeatherData(context, latitudeLocal, longitudeLocal)
             daysList.value = convertJsonObjectToDailyDataList(weatherData!!, context)

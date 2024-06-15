@@ -9,7 +9,7 @@ data class GeoData(
     val longitude: Double? = null,
     val showLocation: Boolean? = false,
     val showSelectedCity: Boolean? = false
-    )
+)
 
 
 class SharedViewModel : ViewModel() {
@@ -20,5 +20,4 @@ class SharedViewModel : ViewModel() {
     fun setUserData(geoData: GeoData) {
         _geoData.value = geoData
     }
-
 }

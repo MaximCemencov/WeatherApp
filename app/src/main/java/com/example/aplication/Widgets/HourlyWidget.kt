@@ -7,11 +7,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.glance.GlanceId
 import androidx.glance.GlanceModifier
+import androidx.glance.ImageProvider
 import androidx.glance.action.actionStartActivity
 import androidx.glance.action.clickable
 import androidx.glance.appwidget.GlanceAppWidget
 import androidx.glance.appwidget.GlanceAppWidgetReceiver
-import androidx.glance.appwidget.cornerRadius
 import androidx.glance.appwidget.lazy.LazyColumn
 import androidx.glance.appwidget.lazy.items
 import androidx.glance.appwidget.provideContent
@@ -36,8 +36,8 @@ import com.example.aplication.MainActivity
 import com.example.aplication.logicExecution.loadFavoriteCity
 import com.example.aplication.logicExecution.settingsProvider
 import convertJsonObjectToHourlyDataList
-import getBackgroundColorResource
-import getItemsColorResource
+import getBackgroundColorXml
+import getItemColorXml
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import okhttp3.OkHttpClient
@@ -92,22 +92,21 @@ class MyHourlyWidget : GlanceAppWidget() {
 
     @Composable
     private fun MyContent(context: Context) {
-        val colorBackground = getBackgroundColorResource(hourlyData[0].weatherIcon)
+        val colorBackground = getBackgroundColorXml(hourlyData[0].weatherIcon)
 
         LazyColumn(
             modifier = GlanceModifier
                 .fillMaxSize()
-                .background(colorProvider = ColorProvider(colorBackground))
+                .background(ImageProvider(colorBackground))
                 .clickable(actionStartActivity<MainActivity>())
                 .padding(5.dp)
         ) {
             items(hourlyData) { data ->
-                val color = getItemsColorResource(data.weatherIcon)
+                val color = getItemColorXml(data.weatherIcon)
                 Column {
                     Row(
                         modifier = GlanceModifier
-                            .background(colorProvider = ColorProvider(color))
-                            .cornerRadius(7.dp)
+                            .background(ImageProvider(color))
                             .fillMaxWidth()
                             .height(40.dp),
                         horizontalAlignment = Alignment.CenterHorizontally
@@ -153,21 +152,3 @@ class MyHourlyWidget : GlanceAppWidget() {
         }
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

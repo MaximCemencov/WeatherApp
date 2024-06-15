@@ -131,6 +131,16 @@ fun getBackgroundColorResource(weatherSmile: String): Int {
     }
 }
 
+fun getBackgroundColorXml(weatherSmile: String): Int {
+    return when (weatherSmile) {
+        "☀️", "🌤", "⛅️" -> R.drawable.clear_sky_background_widget
+        "🌙" -> R.drawable.night_sky_background_widget
+        "🌫️", "☁️" -> R.drawable.maincloudy_sky_background_widget
+        "🌨️", "🌧️", "⛈️" -> R.drawable.rain_sky_background_widger
+        else -> R.drawable.clear_sky_background_widget
+    }
+}
+
 fun getItemsColorResource(weatherSmile: String): Int {
     return when (weatherSmile) {
         "☀️", "🌤", "⛅️" -> R.color.clear_Sky_Items
@@ -141,6 +151,15 @@ fun getItemsColorResource(weatherSmile: String): Int {
     }
 }
 
+fun getItemColorXml(weatherSmile: String): Int {
+    return when (weatherSmile) {
+        "☀️", "🌤", "⛅️" -> R.drawable.clear_sky_item
+        "🌙" -> R.drawable.night_sky_background_item
+        "🌫️", "☁️" -> R.drawable.maincloudy_sky_background_item
+        "🌨️", "🌧️", "⛈️" -> R.drawable.rain_sky_background_item
+        else -> R.drawable.clear_sky_item
+    }
+}
 
 fun convertJsonObjectToDailyDataList(
     response: String,

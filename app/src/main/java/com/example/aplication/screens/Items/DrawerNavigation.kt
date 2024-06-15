@@ -20,7 +20,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.DrawerValue
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.ModalDrawerSheet
@@ -68,7 +67,6 @@ import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun Drawer(context: Context) {
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
@@ -146,7 +144,6 @@ fun Drawer(context: Context) {
                         horizontalAlignment = Alignment.CenterHorizontally,
                     ) {
                         items(cities.reversed()) { city ->
-                            // Обработка данных для каждого элемента списка с помощью LaunchedEffect
                             var parsedData by remember(city) {
                                 mutableStateOf<String?>(null)
                             }
@@ -227,15 +224,18 @@ fun Drawer(context: Context) {
                                             enabled = true,
                                             onClick = {
                                                 sharedViewModel.setUserData(
-                                                    geoData = GeoData(
+                                                        GeoData(
                                                         city.latitude,
                                                         city.longitude,
                                                         showLocation = false,
                                                         showSelectedCity = true
                                                     )
                                                 )
-                                                navController.navigate("home")
+
+
                                                 scope.launch { drawerState.close() }
+
+                                                navController.navigate("home")
                                             }
                                         )
                                         .padding(vertical = 5.dp)
@@ -277,6 +277,7 @@ fun Drawer(context: Context) {
                         navController.navigate("home")
                     }
                 }
+
                 composable("registration") {
                     CitySearch(viewModelView, drawerState, scope) {
                         navController.navigate("home") {
@@ -286,6 +287,7 @@ fun Drawer(context: Context) {
                         }
                     }
                 }
+
                 composable("settings") {
                     Settings(context) {
                         navController.navigate("home") {
@@ -295,6 +297,7 @@ fun Drawer(context: Context) {
                         }
                     }
                 }
+
             }
         }
     )

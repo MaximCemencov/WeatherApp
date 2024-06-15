@@ -7,6 +7,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.glance.GlanceId
 import androidx.glance.GlanceModifier
+import androidx.glance.ImageProvider
 import androidx.glance.action.actionStartActivity
 import androidx.glance.action.clickable
 import androidx.glance.appwidget.GlanceAppWidget
@@ -29,7 +30,7 @@ import com.example.aplication.MainActivity
 import com.example.aplication.R
 import com.example.aplication.logicExecution.loadFavoriteCity
 import com.example.aplication.logicExecution.settingsProvider
-import getItemsColorResource
+import getItemColorXml
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import okhttp3.OkHttpClient
@@ -70,8 +71,7 @@ class MyMiniWidget : GlanceAppWidget() {
             }
 
 
-            val url =
-                "https://api.open-meteo.com/v1/forecast?latitude=$latitudeLocal&longitude=$longitudeLocal&hourly=temperature_2m,weathercode&daily=sunrise,sunset&timezone=auto"
+            val url = "https://api.open-meteo.com/v1/forecast?latitude=$latitudeLocal&longitude=$longitudeLocal&hourly=temperature_2m,weathercode&daily=sunrise,sunset&timezone=auto"
             val client = OkHttpClient()
             val request = Request.Builder()
                 .url(url)
@@ -87,7 +87,6 @@ class MyMiniWidget : GlanceAppWidget() {
             val timeArray = hourly.getJSONArray("time")
             val arrayLength = timeArray.length()
 
-            // Получаем текущее время
             val currentTime = Calendar.getInstance().time
             val dateFormatter = SimpleDateFormat("HH:mm", Locale.getDefault())
             val currentTimeString = dateFormatter.format(currentTime)
@@ -97,7 +96,6 @@ class MyMiniWidget : GlanceAppWidget() {
             val sunrise = daily.getJSONArray("sunrise").getString(0)
             val sunset = daily.getJSONArray("sunset").getString(0)
 
-            // Находим индекс текущего часа
             var currentHourIndex = -1
             for (i in 0 until arrayLength) {
                 val timeFull = timeArray.getString(i)
@@ -119,14 +117,7 @@ class MyMiniWidget : GlanceAppWidget() {
                 sunset.substring(sunset.indexOf('T') + 1)
             )
             temp = hourly.getJSONArray("temperature_2m").getDouble(currentHourIndex)
-            color = getItemsColorResource(
-                weatherSmiley(
-                    hourly.getJSONArray("weathercode").getInt(currentHourIndex),
-                    hour,
-                    sunrise.substring(sunrise.indexOf('T') + 1),
-                    sunset.substring(sunset.indexOf('T') + 1)
-                )
-            )
+            color = getItemColorXml(weatherSmiley(hourly.getJSONArray("weathercode").getInt(currentHourIndex), hour, sunrise.substring(sunrise.indexOf('T') + 1), sunset.substring(sunset.indexOf('T') + 1)))
             MyMiniWidget().update(context, id)
         }
 
@@ -139,7 +130,7 @@ class MyMiniWidget : GlanceAppWidget() {
         Column(
             modifier = GlanceModifier
                 .fillMaxSize()
-                .background(colorProvider = ColorProvider(color))
+                .background(ImageProvider(color))
                 .clickable(actionStartActivity<MainActivity>()),
             verticalAlignment = Alignment.CenterVertically,
         ) {

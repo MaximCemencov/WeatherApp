@@ -25,6 +25,7 @@ import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -50,17 +51,19 @@ import com.example.aplication.logicExecution.settingsProvider
 import com.example.aplication.screens.Items.ColumnItem
 import com.example.aplication.screens.Items.RowItem
 
-val mainFont = FontFamily(
-    Font(R.font.arial)
-)
+val mainFont = FontFamily(Font(R.font.arial))
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun MainScreen(paddingValues: PaddingValues, geoData: GeoData? = null, context: Context) {
+fun MainScreen(
+    paddingValues: PaddingValues,
+    geoData: GeoData? = null,
+    context: Context
+) {
     val viewModel = viewModel<MainViewModel>()
     val refreshing by viewModel.isloading.collectAsState()
 
-    val pullRefreshState = rememberPullRefreshState(refreshing, { viewModel.ReLoad(geoData) })
+    val pullRefreshState = rememberPullRefreshState(refreshing, { viewModel.reLoad(geoData) })
 
     val mainList = viewModel.mainList
     val hoursList = viewModel.hoursList
@@ -69,8 +72,12 @@ fun MainScreen(paddingValues: PaddingValues, geoData: GeoData? = null, context: 
     val itemColor = colorResource(mainList.value.itemsColor)
     val backgroundColor = colorResource(mainList.value.backgroundColor)
 
+    LaunchedEffect(geoData) {
+        viewModel.reLoad(geoData)
+    }
 
-    if (refreshing){
+
+    if (refreshing) {
         Box(
             modifier = Modifier.fillMaxSize(),
             contentAlignment = Alignment.Center
@@ -78,13 +85,12 @@ fun MainScreen(paddingValues: PaddingValues, geoData: GeoData? = null, context: 
             CircularProgressIndicator(
                 color = Color(0xFF0289FE), // Сделаем его синим
             )
-        }    } else {
+        }
+    } else {
         Column(
             modifier = Modifier.fillMaxSize(),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-
-
             LazyColumn(
                 modifier = Modifier
                     .fillMaxWidth()

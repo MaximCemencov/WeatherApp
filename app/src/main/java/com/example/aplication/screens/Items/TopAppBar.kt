@@ -29,7 +29,7 @@ import kotlinx.coroutines.launch
 fun MainScreenWithTopAppBar(
     drawerState: DrawerState,
     scope: CoroutineScope,
-    sharedViewModel: GeoData?,
+    geoData: GeoData?,
     context: Context,
     onClick: () -> Unit
 ) {
@@ -72,6 +72,6 @@ fun MainScreenWithTopAppBar(
         },
 
         ) { padding ->
-        MainScreen(padding, sharedViewModel, context)
+        MainScreen(padding, geoData, context)
     }
 }

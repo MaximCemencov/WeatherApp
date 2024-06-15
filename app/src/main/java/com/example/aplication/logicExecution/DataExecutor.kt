@@ -25,11 +25,13 @@ import kotlin.coroutines.resumeWithException
 
 var latitudeLocal = 0.0
 var longitudeLocal = 0.0
-suspend fun fetchWeatherData(context: Context, latitude: Double? = null, longitude: Double? = null): String? {
+suspend fun fetchWeatherData(
+    context: Context,
+    latitude: Double? = null,
+    longitude: Double? = null
+): String? {
 
-
-    // Проверка разрешения на использование геопозиции
-    val hasLocationPermission = ContextCompat.checkSelfPermission(
+    ContextCompat.checkSelfPermission(
         context,
         Manifest.permission.ACCESS_FINE_LOCATION
     ) == PackageManager.PERMISSION_GRANTED
@@ -37,7 +39,8 @@ suspend fun fetchWeatherData(context: Context, latitude: Double? = null, longitu
 
     if (latitude == null && longitude == null) {
         // Проверка включенности геолокации на телефоне
-        val locationManager = context.getSystemService(Context.LOCATION_SERVICE) as LocationManager
+        val locationManager =
+            context.getSystemService(Context.LOCATION_SERVICE) as LocationManager
         val isLocationEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)
         if (!isLocationEnabled) {
             showToast(context, "Пожалуйста включите GPS")
@@ -150,8 +153,6 @@ suspend fun fetchWeatherData(context: Context, latitude: Double? = null, longitu
         showToast(context, "No internet Connection")
         null
     }
-
-
 }
 
 

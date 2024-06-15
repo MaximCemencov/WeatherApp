@@ -7,9 +7,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.glance.GlanceId
 import androidx.glance.GlanceModifier
+import androidx.glance.ImageProvider
 import androidx.glance.appwidget.GlanceAppWidget
 import androidx.glance.appwidget.GlanceAppWidgetReceiver
-import androidx.glance.appwidget.cornerRadius
 import androidx.glance.appwidget.lazy.LazyColumn
 import androidx.glance.appwidget.lazy.items
 import androidx.glance.appwidget.provideContent
@@ -34,16 +34,16 @@ import com.example.aplication.Features.getLocationFromSharedPreferences
 import com.example.aplication.logicExecution.loadFavoriteCity
 import com.example.aplication.logicExecution.settingsProvider
 import convertJsonObjectToDailyDataList
-import getBackgroundColorResource
-import getItemsColorResource
+import getBackgroundColorXml
+import getItemColorXml
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import okhttp3.OkHttpClient
 import okhttp3.Request
 
-class DailyWidget : GlanceAppWidgetReceiver() { override val glanceAppWidget: GlanceAppWidget = MyDailyWidget() }
-
-
+class DailyWidget : GlanceAppWidgetReceiver() {
+    override val glanceAppWidget: GlanceAppWidget = MyDailyWidget()
+}
 
 
 class MyDailyWidget : GlanceAppWidget() {
@@ -57,8 +57,8 @@ class MyDailyWidget : GlanceAppWidget() {
             val favoriteCity = loadFavoriteCity(context)
             val pair = getLocationFromSharedPreferences(context)
 
-            var latitudeLocal: Double?
-            var longitudeLocal: Double?
+            val latitudeLocal: Double?
+            val longitudeLocal: Double?
 
             if (favoriteCity != null) {
                 latitudeLocal = favoriteCity.latitude
@@ -89,21 +89,24 @@ class MyDailyWidget : GlanceAppWidget() {
 
     @Composable
     private fun MyContent(context: Context) {
-        val colorBackground = getBackgroundColorResource(hourlyData[0].weatherIcon)
+        val colorBackground = getBackgroundColorXml(hourlyData[0].weatherIcon)
+
+
 
         LazyColumn(
             modifier = GlanceModifier
                 .fillMaxSize()
-                .background(colorProvider = ColorProvider(colorBackground))
+                .background(ImageProvider(colorBackground))
                 .padding(7.dp)
         ) {
             items(hourlyData) { data ->
-                val color = getItemsColorResource(data.weatherIcon)
+                val color = getItemColorXml(data.weatherIcon)
+
                 Column {
+
                     Row(
                         modifier = GlanceModifier
-                            .background(colorProvider = ColorProvider(color))
-                            .cornerRadius(7.dp)
+                            .background(ImageProvider(color))
                             .fillMaxWidth()
                             .height(50.dp),
                         verticalAlignment = Alignment.CenterVertically,
@@ -111,7 +114,7 @@ class MyDailyWidget : GlanceAppWidget() {
                     ) {
                         Text(
                             text = data.day,
-                            modifier = GlanceModifier.padding(2.dp).width(100.dp) ,
+                            modifier = GlanceModifier.padding(2.dp).width(100.dp),
                             style = TextStyle(
                                 fontSize = 18.sp,
                                 fontWeight = FontWeight.Medium,
@@ -142,7 +145,8 @@ class MyDailyWidget : GlanceAppWidget() {
                                 textAlign = TextAlign.Center
                             ),
                         )
-                        Text(text = "${settingsProvider(data.maxTemp, context)}°",
+                        Text(
+                            text = "${settingsProvider(data.maxTemp, context)}°",
                             modifier = GlanceModifier.width(55.dp),
                             style = TextStyle(
                                 fontSize = 20.sp,
